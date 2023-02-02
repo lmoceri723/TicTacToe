@@ -19,6 +19,8 @@ public class TicTacToe
     public static final String O_MARKER = "O";
     public static final String BLANK = "-";
 
+    public static final String TIE = "Tie";
+
     /** Winning Directions **/
     public static final int ROW_WIN = 1;
     public static final int COL_WIN = 2;
@@ -35,6 +37,8 @@ public class TicTacToe
     private Square[][] board;
     private boolean isGameOver;
 
+    private TicTacToeViewer window;
+
     /**
      * Constructor which initialized the board with BLANKs.
      * The winner is also initialized to BLANK.
@@ -42,11 +46,13 @@ public class TicTacToe
      * The view is initialized with this TicTacToe object
      */
     public TicTacToe() {
+        this.window = new TicTacToeViewer(this);
+
         // Initialize Squares in the board
         this.board = new Square[3][3];
         for(int row = 0; row < this.board.length; row++) {
             for(int col = 0; col< this.board[row].length; col++) {
-                this.board[row][col] = new Square(row, col);
+                this.board[row][col] = new Square(row, col, window);
             }
         }
 
@@ -110,6 +116,7 @@ public class TicTacToe
         // Loop until there is a winner or no more turns
         while(!this.checkWin() && this.checkTurn()) {
             this.printBoard();
+            window.repaint();
             System.out.println("Enter your Row Pick:" );
             int row = input.nextInt();
             System.out.println("Enter your Col Pick:" );
@@ -121,12 +128,14 @@ public class TicTacToe
             }
         }
 
+        window.repaint();
         this.printBoard();
         this.isGameOver = true;
 
         // Determine if there was a winner
         if(!this.checkWin()) {
             System.out.println("Game ends in a tie!");
+            this.winner = TIE;
         } else {
             this.markWinningSquares();
             if (this.turn%2 == 0) {
@@ -174,7 +183,7 @@ public class TicTacToe
      * Check if there's a win on the board
      * @return True if there's a win and False otherwise
      */
-    private boolean checkWin() {
+    public boolean checkWin() {
         int rowIndex = checkRow();
         int colIndex = checkCol();
         int diag = checkDiag();

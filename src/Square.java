@@ -1,3 +1,5 @@
+import java.awt.*;
+
 /**
  * A class written to support the TicTacToe Game.
  *
@@ -13,6 +15,8 @@
 public class Square {
 
     private String marker;
+    private TicTacToeViewer board;
+    private Image[] images;
     private int row;
     private int col;
     private boolean isWinningSquare;
@@ -23,7 +27,10 @@ public class Square {
      * @param row the row the square is in
      * @param col the column the square is in
      */
-    public Square(int row, int col) {
+    public Square(int row, int col, TicTacToeViewer board) {
+        this.board = board;
+        images = board.getImages();
+
         this.row = row;
         this.col = col;
 
@@ -58,4 +65,25 @@ public class Square {
     public String toString() {
         return this.marker;
     }
+
+    public void draw(Graphics g)
+    {
+        if (isWinningSquare)
+        {
+            g.setColor(Color.GREEN);
+            g.fillRect((col + 1) * TicTacToeViewer.ROW_SIZE, (row + 1) * TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE);
+        }
+
+        if (marker.equals(TicTacToe.X_MARKER))
+        {
+            g.drawImage(images[0], (col + 1) * TicTacToeViewer.ROW_SIZE, (row + 1) * TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, board);
+        }
+        else if (marker.equals(TicTacToe.O_MARKER))
+        {
+            g.drawImage(images[1], (col + 1) * TicTacToeViewer.ROW_SIZE, (row + 1) * TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, board);
+        }
+        g.setColor(Color.BLACK);
+        g.drawRect((row + 1) * TicTacToeViewer.ROW_SIZE, (col + 1) * TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE);
+    }
 }
+
