@@ -2,7 +2,6 @@ import java.awt.*;
 
 /**
  * A class written to support the TicTacToe Game.
- *
  * Each Square object is one position of the TicTacToe
  * board. It maintains information on the marker, its
  * location on the board, and whether it is part
@@ -15,10 +14,10 @@ import java.awt.*;
 public class Square {
 
     private String marker;
-    private TicTacToeViewer board;
-    private Image[] images;
-    private int row;
-    private int col;
+    private final TicTacToeViewer board;
+    private final Image[] images;
+    private final int row;
+    private final int col;
     private boolean isWinningSquare;
 
     /**

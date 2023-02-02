@@ -2,7 +2,6 @@
  * A TicTacToe game adopted from CodeHS
  * Written to be used for either the console or
  * the TicTacToeView class
- *
  * Each position on the board is a Square object
  * which keeps track of the marker ("X", "O")
  *
@@ -34,15 +33,14 @@ public class TicTacToe
     private int winIndex;       // Provides the index of the row/col of the win
     private int turn;
 
-    private Square[][] board;
+    private final Square[][] board;
     private boolean isGameOver;
 
-    private TicTacToeViewer window;
+    private final TicTacToeViewer window;
 
     /**
      * Constructor which initialized the board with BLANKs.
      * The winner is also initialized to BLANK.
-     *
      * The view is initialized with this TicTacToe object
      */
     public TicTacToe() {
@@ -88,18 +86,10 @@ public class TicTacToe
     private void markWinningSquares() {
         for(int i=0; i<3; i++) {
             switch (this.winDirection) {
-                case TicTacToe.ROW_WIN:
-                    this.board[this.winIndex][i].setWinningSquare();
-                    break;
-                case TicTacToe.COL_WIN:
-                    this.board[i][this.winIndex].setWinningSquare();
-                    break;
-                case TicTacToe.DIAGONAL_RIGHT_WIN:
-                    this.board[i][i].setWinningSquare();
-                    break;
-                case TicTacToe.DIAGONAL_LEFT_WIN:
-                    this.board[i][2-i].setWinningSquare();
-                    break;
+                case TicTacToe.ROW_WIN -> this.board[this.winIndex][i].setWinningSquare();
+                case TicTacToe.COL_WIN -> this.board[i][this.winIndex].setWinningSquare();
+                case TicTacToe.DIAGONAL_RIGHT_WIN -> this.board[i][i].setWinningSquare();
+                case TicTacToe.DIAGONAL_LEFT_WIN -> this.board[i][2 - i].setWinningSquare();
             }
         }
     }

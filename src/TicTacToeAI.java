@@ -6,8 +6,11 @@ import java.util.ArrayList;
 
 public class TicTacToeAI extends PApplet
 {
+    public static final int X = 1;
+    public static final int O = 2;
+    public static final int BLANK = 0;
+    public static final int TIE = 0;
     public Integer[][] board = new Integer[3][3];
-    public int round;
     public int[] winningPos = new int[4];
 
     public void settings(){
@@ -49,7 +52,7 @@ public class TicTacToeAI extends PApplet
 
     public void drawSquare(int x, int y)
     {
-        if (board[x][y] == 1)
+        if (board[x][y] == X)
         {
             drawX(x * 400, y * 400);
         }
@@ -81,7 +84,7 @@ public class TicTacToeAI extends PApplet
         int y = getPos(mouseY);
         if (board[x][y] == 0)
         {
-            board[x][y] = 1;
+            board[x][y] = X;
             drawBoard();
         }
     }
@@ -101,11 +104,7 @@ public class TicTacToeAI extends PApplet
             }
         }
 
-        if (count % 2 == 0)
-        {
-            return true;
-        }
-        return false;
+        return count % 2 == 0;
     }
 
     public int getPos(int coords)
@@ -116,7 +115,7 @@ public class TicTacToeAI extends PApplet
         }
         else if (coords > 400)
         {
-            return 1;
+            return X;
         }
 
         return 0;
@@ -194,11 +193,14 @@ public class TicTacToeAI extends PApplet
 
         return checkDiag(board);
     }
-
-    // Returns all the coordinates of the open spaces
+    /**
+    Start of recursive/AI methods
+     **/
+    // Returns an arraylist of coordinate pairs in arrays
+    // Represents all the coordinates of the open spaces
     public ArrayList<Integer[]> getValidSpaces(Integer[][] board)
     {
-        ArrayList<Integer[]> moves = new ArrayList<Integer[]>();
+        ArrayList<Integer[]> moves = new ArrayList<>();
         for (int i = 0; i < board.length; i++)
         {
             for (int j = 0; j < board.length; j++)
@@ -216,16 +218,13 @@ public class TicTacToeAI extends PApplet
     }
 
     // Creates a new board with a move at coordinates pair and returns it
-    public Integer[][] doMove(Integer[] pair)
+    public Integer[][] doMove(Integer[][] board, Integer[] pair)
     {
         Integer[][] newBoard = new Integer[3][3];
 
         for (int i = 0; i < board.length; i++)
         {
-            for (int j = 0; j < board.length; j++)
-            {
-                newBoard[i][j] = board[i][j];
-            }
+            System.arraycopy(board[i], 0, newBoard[i], 0, board.length);
         }
 
         newBoard[pair[0]][pair[1]] = 2;
@@ -236,22 +235,24 @@ public class TicTacToeAI extends PApplet
     {
         // Set of all open squares
         ArrayList<Integer[]> openSquares = getValidSpaces(board);
+        // if open squares is empty ...
 
         // Set of all boards w/ the moves made
-        ArrayList<Integer[][]> doneMoves = new ArrayList<Integer[][]>();
-        for(Integer[] square : openSquares)
+        ArrayList<Integer[][]> doneMoves = new ArrayList<>();
+        for(Integer[] pair : openSquares)
         {
-            doneMoves.add(doMove(square));
+            doneMoves.add(doMove(board, pair));
         }
 
         // Result of the move, as well as the coordinates it was made at
-        ArrayList<Integer[]> results = new ArrayList<Integer[]>();
+        // Where recursion happens
+        ArrayList<Integer[]> results = new ArrayList<>();
         for(Integer[][] doneMove : doneMoves)
         {
             results.add(aiMove(doneMove));
         }
 
-        ArrayList<Integer> winCases = new ArrayList<Integer>();
+        ArrayList<Integer> winCases = new ArrayList<>();
         for(Integer[] result : results)
         {
             winCases.add(result[0]);
@@ -259,16 +260,22 @@ public class TicTacToeAI extends PApplet
 
         // Something goes wrong when no moves can be made
         // Relative to the AI
+        // 2 = AI win
+        // 1 = Player win
+        // 0 = Tie
         boolean willWin = false;
         boolean willDraw = false;
-        for (Integer[] result : results)
+        // Goes over win cases, if there's a win in any case, willWin is true, and it stops iterating\
+        // If a draw is present, set willDraw to true and keep iterating
+        // Unnecessary for loop
+        for (Integer winCase : winCases)
         {
-            if (result[0] == 2)
+            if (winCase == 2)
             {
                 willWin = true;
                 break;
             }
-            else if (result[0] == 2)
+            else if (winCase == 0)
             {
                 willDraw = true;
             }
@@ -278,23 +285,21 @@ public class TicTacToeAI extends PApplet
         {
             int index = winCases.indexOf(2);
             Integer[] pair = openSquares.get(index);
-            Integer[] array = {2, pair[0], pair[1]};
-            return array;
+            return new Integer[]{2, pair[0], pair[1]};
         }
 
         else if (willDraw)
         {
             int index = winCases.indexOf(0);
             Integer[] pair = openSquares.get(index);
-            Integer[] array = {0, pair[0], pair[1]};
-            return array;
+            return new Integer[]{0, pair[0], pair[1]};
         }
         else
         {
+            // Issue could be here, what happens if it's empty
             int index = 0;
             Integer[] pair = openSquares.get(index);
-            Integer[] array = {0, pair[0], pair[1]};
-            return array;
+            return new Integer[]{0, pair[0], pair[1]};
         }
 
     }
@@ -306,7 +311,8 @@ public class TicTacToeAI extends PApplet
         {
             if (isAiTurn())
             {
-                aiMove(board);;
+                // returns the pair of coordinates and win state, doesn't make the move
+                aiMove(board);
             }
         }
         else
