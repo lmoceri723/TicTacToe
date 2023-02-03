@@ -18,8 +18,6 @@ public class TicTacToe
     public static final String O_MARKER = "O";
     public static final String BLANK = "-";
 
-    public static final String TIE = "Tie";
-
     /** Winning Directions **/
     public static final int ROW_WIN = 1;
     public static final int COL_WIN = 2;
@@ -39,7 +37,7 @@ public class TicTacToe
     private final TicTacToeViewer window;
 
     /**
-     * Constructor which initialized the board with BLANKs.
+     * Constructor which initialized the board with BLANKS.
      * The winner is also initialized to BLANK.
      * The view is initialized with this TicTacToe object
      */
@@ -104,7 +102,7 @@ public class TicTacToe
         System.out.println("Welcome to Tic Tac Toe!");
 
         // Loop until there is a winner or no more turns
-        while(!this.checkWin() && this.checkTurn()) {
+        while(this.checkWin() && this.checkTurn()) {
             this.printBoard();
             window.repaint();
             System.out.println("Enter your Row Pick:" );
@@ -123,9 +121,8 @@ public class TicTacToe
         this.isGameOver = true;
 
         // Determine if there was a winner
-        if(!this.checkWin()) {
+        if(this.checkWin()) {
             System.out.println("Game ends in a tie!");
-            this.winner = TIE;
         } else {
             this.markWinningSquares();
             if (this.turn%2 == 0) {
@@ -139,8 +136,7 @@ public class TicTacToe
     }
 
 
-    /******************** Do NOT Modify Code Below this Line ********************/
-    /**
+    /******************* Do NOT Modify Code Below this Line ********************
      * Places an X or an O in the provided row and col
      * @param row row to place character in indexed at 0
      * @param col column to place character in indexed at 0
@@ -181,17 +177,17 @@ public class TicTacToe
         if (rowIndex != -1) {
             this.winDirection = ROW_WIN;
             this.winIndex = rowIndex;
-            return true;
+            return false;
         } else if (colIndex != -1) {
             this.winDirection = COL_WIN;
             this.winIndex = colIndex;
-            return true;
+            return false;
         } else if (diag != -1) {
             this.winDirection = diag;
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**

@@ -7,7 +7,8 @@ public class TicTacToeViewer extends JFrame
     public static final int WINDOW_WIDTH = 750;
     public static final int WINDOW_HEIGHT = 750;
     public static final int ROW_SIZE = 150;
-    public static final Font FONT = new Font("SansSerif", Font.PLAIN, ROW_SIZE / 3);
+    public static final Font FONT = new Font("SansSerif", Font.ITALIC, ROW_SIZE / 3);
+    public static final Font WIN_FONT = new Font("SansSerif", Font.BOLD, ROW_SIZE / 2);
     private final TicTacToe t;
     public TicTacToeViewer(TicTacToe t) {
 
@@ -39,16 +40,20 @@ public class TicTacToeViewer extends JFrame
             }
         }
 
-        switch (t.getWinner()) {
-            case TicTacToe.TIE:
-                // print tie
-                break;
-            case TicTacToe.X_MARKER:
-                // print x wins
-                break;
-            case TicTacToe.O_MARKER:
-                // print o wins
-                break;
+
+        if (t.getGameOver())
+        {
+            if (t.checkTie())
+            {
+                String msg = "It's a Tie!";
+                g.setFont(WIN_FONT);
+                int width = g.getFontMetrics().stringWidth(msg);
+                g.drawString(msg, WINDOW_WIDTH / 2 - (width / 2), WINDOW_HEIGHT - WIN_FONT.getSize());
+            }
+            String winner = t.getWinner() + " Wins!";
+            g.setFont(WIN_FONT);
+            int width = g.getFontMetrics().stringWidth(winner);
+            g.drawString(winner, WINDOW_WIDTH / 2 - (width / 2), WINDOW_HEIGHT - WIN_FONT.getSize());
         }
     }
 
@@ -63,6 +68,15 @@ public class TicTacToeViewer extends JFrame
             int y_offset = ROW_SIZE * 2 / 3;
 
             g.drawString(Integer.toString(i), x_offset - width / 2, y_offset);
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            int height = FONT.getSize();
+            int x_offset = ROW_SIZE * 2 / 3;
+            int y_offset = (ROW_SIZE * ( 2 * i + 3)) / 2;
+
+            g.drawString(Integer.toString(i), x_offset - height / 2, y_offset + height / 3);
         }
     }
 }

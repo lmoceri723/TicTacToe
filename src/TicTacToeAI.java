@@ -1,7 +1,13 @@
-// By Landon Moceri
-// If anyone sees this, please ignore it
-import processing.core.PApplet;
+/**
+ * By Landon Moceri
+ * If anyone sees this, please ignore it
+ * Current Errors:
+ * Should implement JFrame instead of processing
+ * Game bugs out after 4 moves
+ * AI always loses
+ */
 
+import processing.core.PApplet;
 import java.util.ArrayList;
 
 public class TicTacToeAI extends PApplet
@@ -236,6 +242,10 @@ public class TicTacToeAI extends PApplet
         // Set of all open squares
         ArrayList<Integer[]> openSquares = getValidSpaces(board);
         // if open squares is empty ...
+        if (openSquares.isEmpty())
+        {
+            return new Integer[]{-1, -1, -1};
+        }
 
         // Set of all boards w/ the moves made
         ArrayList<Integer[][]> doneMoves = new ArrayList<>();
@@ -312,7 +322,11 @@ public class TicTacToeAI extends PApplet
             if (isAiTurn())
             {
                 // returns the pair of coordinates and win state, doesn't make the move
-                aiMove(board);
+                Integer[] result = aiMove(board);
+                if (result[0] != -1)
+                {
+                    board[result[1]][result[2]] = 2;
+                }
             }
         }
         else
