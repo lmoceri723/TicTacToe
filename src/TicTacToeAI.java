@@ -8,209 +8,25 @@
  * AI always loses
  */
 
-import processing.core.PApplet;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-public class TicTacToeAI extends PApplet
+public class TicTacToeAI extends TicTacToe
 {
-    public static final int X = 1;
-    public Integer[][] board = new Integer[3][3];
-    public int[] winningPos = new int[4];
-
-    public void settings(){
-        size(1200, 1200);
-    }
-
-    public void setup()
+    /** Returns an arraylist of coordinate pairs represented by arrays
+     * This represents all spaces that the AI can move in **/
+    public ArrayList<Integer[]> getValidSpaces(Square[][] board)
     {
-        background(255);
-        noFill();
-        strokeWeight(10);
-
-        line(400, 0, 400, 1200);
-        line(800, 0, 800, 1200);
-        line(0, 400, 1200, 400);
-        line(0, 800, 1200, 800);
-
-        strokeWeight(20);
-
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                board[i][j] = 0;
-            }
-        }
-    }
-
-    public void drawBoard()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                drawSquare(i, j);
-            }
-        }
-    }
-
-    public void drawSquare(int x, int y)
-    {
-        if (board[x][y] == X)
-        {
-            drawX(x * 400, y * 400);
-        }
-        else if (board[x][y] == 2)
-        {
-            drawO(x * 400, y * 400);
-        }
-    }
-
-    public void drawX(int x, int y)
-    {
-        line(x + 50, y + 50,  x + 350, y + 350);
-        line(x + 350, y + 50, x + 50, y + 350);
-    }
-
-    public void drawO(int x, int y)
-    {
-        circle(x + 200, y + 200, 300);
-    }
-
-    public void mousePressed()
-    {
-        if (!(checkWin(board) == 0))
-        {
-            return;
-        }
-
-        int x = getPos(mouseX);
-        int y = getPos(mouseY);
-        if (board[x][y] == 0)
-        {
-            board[x][y] = X;
-            drawBoard();
-        }
-    }
-
-    public boolean isAiTurn()
-    {
-        int count = 0;
-
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                if (board[i][j] == 0)
-                {
-                    count++;
-                }
-            }
-        }
-
-        return count % 2 == 0;
-    }
-
-    public int getPos(int coords)
-    {
-        if (coords > 800)
-        {
-            return 2;
-        }
-        else if (coords > 400)
-        {
-            return X;
-        }
-
-        return 0;
-    }
-
-    public int checkRows(Integer[][] board)
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            winningPos = new int[]{i * 400 + 200, 0, i * 400 + 200, 1200};
-            if (board[i][0] == 1 && board[i][1] == 1  && board[i][2] == 1)
-            {
-                return 1;
-            }
-            else if (board[i][0] == 2 && board[i][1] == 2  && board[i][2] == 2)
-            {
-                return 2;
-            }
-        }
-        return 0;
-    }
-
-    public int checkCols(Integer[][] board)
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            winningPos = new int[]{0, i * 400 + 200, 1200, i * 400 + 200};
-            if (board[0][i] == 1 && board[1][i] == 1  && board[2][i] == 1)
-            {
-                return 1;
-            }
-            else if (board[0][i] == 2 && board[1][i] == 2  && board[2][i] == 2)
-            {
-                return 2;
-            }
-        }
-        return 0;
-    }
-
-    public int checkDiag(Integer[][] board)
-    {
-        winningPos = new int[]{0, 0, 1200, 1200};
-        if (board[0][0]== 1 && board[1][1] == 1 && board[2][2] == 1)
-        {
-            return 1;
-        }
-        else if (board[0][0]== 2 && board[1][1] == 2 && board[2][2] == 2)
-        {
-            return 2;
-        }
-
-        winningPos = new int[]{0, 1200, 1200, 0};
-        if (board[0][2]== 1 && board[1][1] == 1 && board[2][0] == 1)
-        {
-            return 1;
-        }
-        else if (board[0][2]== 2 && board[1][1] == 2 && board[2][0] == 2)
-        {
-            return 2;
-        }
-
-        return 0;
-    }
-
-    public int checkWin(Integer[][] board)
-    {
-        if (checkRows(board) != 0)
-        {
-            return checkRows(board);
-        }
-        if (checkCols(board) != 0)
-        {
-            return checkCols(board);
-        }
-
-        return checkDiag(board);
-    }
-    /**
-    Start of recursive/AI methods
-     **/
-    // Returns an arraylist of coordinate pairs in arrays
-    // Represents all the coordinates of the open spaces
-    public ArrayList<Integer[]> getValidSpaces(Integer[][] board)
-    {
+        // Iterates through the board
         ArrayList<Integer[]> moves = new ArrayList<>();
         for (int i = 0; i < board.length; i++)
         {
             for (int j = 0; j < board.length; j++)
             {
-                if (board[i][j] == 0)
+                // If the space at the board is
+                if (this.getBoard()[i][j].getMarker().equals(BLANK))
                 {
+                    // Adds the pair to the ArrayList
                     Integer[] pair = new Integer[2];
                     pair[0] = i;
                     pair[1] = j;
@@ -222,40 +38,45 @@ public class TicTacToeAI extends PApplet
     }
 
     // Creates a new board with a move at coordinates pair and returns it
-    public Integer[][] doMove(Integer[][] board, Integer[] pair)
+    public Square[][] doMove(Square[][] board, Integer[] pair)
     {
-        Integer[][] newBoard = new Integer[3][3];
+        Square[][] newBoard = new Square[3][3];
 
+        // Copies over the new board
         for (int i = 0; i < board.length; i++)
         {
-            System.arraycopy(board[i], 0, newBoard[i], 0, board.length);
+            for (int j = 0; j < board.length; j++)
+            {
+                newBoard[i][j].setMarker(board[i][j].getMarker());
+            }
         }
-
-        newBoard[pair[0]][pair[1]] = 2;
+        // Makes a move at the coordinates of the pair
+        newBoard[pair[0]][pair[1]].setMarker(O_MARKER);
         return newBoard;
     }
 
-    public Integer[] aiMove(Integer[][] board)
+    public Integer[] aiMove(Square[][] board)
     {
         // Set of all open squares
         ArrayList<Integer[]> openSquares = getValidSpaces(board);
-        // if open squares is empty ...
+        // Returns -1 if there are no open squares
         if (openSquares.isEmpty())
         {
-            return new Integer[]{-1, -1, -1};
+            return new Integer[]{-1};
         }
 
         // Set of all boards w/ the moves made
-        ArrayList<Integer[][]> doneMoves = new ArrayList<>();
+        ArrayList<Square[][]> doneMoves = new ArrayList<>();
         for(Integer[] pair : openSquares)
         {
             doneMoves.add(doMove(board, pair));
         }
 
+        // WINNING IS NEVER CHECKED
         // Result of the move, as well as the coordinates it was made at
         // Where recursion happens
         ArrayList<Integer[]> results = new ArrayList<>();
-        for(Integer[][] doneMove : doneMoves)
+        for(Square[][] doneMove : doneMoves)
         {
             results.add(aiMove(doneMove));
         }
@@ -266,7 +87,6 @@ public class TicTacToeAI extends PApplet
             winCases.add(result[0]);
         }
 
-        // Something goes wrong when no moves can be made
         // Relative to the AI
         // 2 = AI win
         // 1 = Player win
@@ -312,35 +132,63 @@ public class TicTacToeAI extends PApplet
 
     }
 
-    public void draw()
+    @Override
+    public void takeTurn(int row, int col)
     {
-        drawBoard();
-        if (checkWin(board) == 0)
-        {
-            if (isAiTurn())
-            {
-                // returns the pair of coordinates and win state, doesn't make the move
-                Integer[] result = aiMove(board);
-                if (result[0] != -1)
-                {
-                    board[result[1]][result[2]] = 2;
-                }
-            }
-        }
-        else
-        {
-            strokeWeight(30);
-            stroke(255, 0, 0);
-            line(winningPos[0], winningPos[1], winningPos[2], winningPos[3]);
-            stroke(0, 0, 0);
-            strokeWeight(20);
-            drawBoard();
-        }
+            getBoard()[row][col].setMarker(X_MARKER);
     }
 
-    public static void main(String[] args)
+    @Override
+    public void run()
     {
-        String[] appletArgs = new String[] { "TicTacToeAI" };
-        PApplet.main(appletArgs);
+//        Scanner input = new Scanner(System.in);
+//
+//        System.out.println("Welcome to Tic Tac Toe!");
+//
+//        // Loop until there is a winner or no more turns
+//        while(this.checkWin() && this.checkTurn())
+//        {
+//            // Collect input
+//            this.printBoard();
+//            System.out.println("Enter your Row Pick:" );
+//            int row = input.nextInt();
+//            System.out.println("Enter your Col Pick:" );
+//            int col = input.nextInt();
+//            // Marks board with X
+//            this.takeTurn(row, col);
+//        }
+//
+//        this.printBoard();
+//        setGameOver();
+//
+//        // Determine if there was a winner
+//        if(this.checkWin()) {
+//            System.out.println("Game ends in a tie!");
+//        } else {
+//            this.markWinningSquares();
+//            if (this.turn%2 == 0) {
+//                this.winner = O_MARKER;
+//                System.out.println("O Wins!");
+//            } else {
+//                this.winner = X_MARKER;
+//                System.out.println("X Wins!");
+//            }
+//        }
+//
+//
+//
+//        printBoard();
+//        if (checkWin(this.board) == 0)
+//        {
+//            if (isAiTurn())
+//            {
+//                // returns the pair of coordinates and win state, doesn't make the move
+//                Integer[] result = aiMove(board);
+//                if (result[0] != -1)
+//                {
+//                    board[result[1]][result[2]] = 2;
+//                }
+//            }
+//        }
     }
 }

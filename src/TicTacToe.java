@@ -73,6 +73,9 @@ public class TicTacToe
     public boolean getGameOver() {
         return this.isGameOver;
     }
+    public void setGameOver() {
+        this.isGameOver = true;
+    }
 
     public boolean checkTie() {
         return this.isGameOver && this.winner.equals(BLANK);
@@ -82,7 +85,7 @@ public class TicTacToe
      * Gets the direction and index of the win
      * and marks the winning squares
      */
-    private void markWinningSquares() {
+    public void markWinningSquares() {
         for(int i=0; i<3; i++) {
             switch (this.winDirection) {
                 case TicTacToe.ROW_WIN -> this.board[this.winIndex][i].setWinningSquare();
@@ -105,7 +108,6 @@ public class TicTacToe
         // Loop until there is a winner or no more turns
         while(this.checkWin() && this.checkTurn()) {
             this.printBoard();
-            window.repaint();
             System.out.println("Enter your Row Pick:" );
             int row = input.nextInt();
             System.out.println("Enter your Col Pick:" );
@@ -117,7 +119,6 @@ public class TicTacToe
             }
         }
 
-        window.repaint();
         this.printBoard();
         this.isGameOver = true;
 
@@ -142,7 +143,7 @@ public class TicTacToe
      * @param row row to place character in indexed at 0
      * @param col column to place character in indexed at 0
      */
-    private void takeTurn(int row, int col) {
+    public void takeTurn(int row, int col) {
         if(this.turn % 2 == 0) {
             this.board[row][col].setMarker(X_MARKER);
         }
@@ -159,7 +160,7 @@ public class TicTacToe
      * @param col selected column number indexed at 0
      * @return True if the location is available, False otherwise
      */
-    private boolean pickLocation(int row, int col) {
+    public boolean pickLocation(int row, int col) {
         if(row < 3 && col < 3) {
             return this.board[row][col].isEmpty();
         }
@@ -257,14 +258,14 @@ public class TicTacToe
      * There can only be a max of 9 turns taken
      * @return True if there is a turn left, False otherwise
      */
-    private boolean checkTurn() {
+    public boolean checkTurn() {
         return this.turn < 9;
     }
 
     /**
      * Prints the board to the console
      */
-    private void printBoard() {
+    public void printBoard() {
         System.out.println("  0 1 2");
         int row = 0;
         for(Square[] array : this.board) {
@@ -276,6 +277,7 @@ public class TicTacToe
             row++;
             System.out.println();
         }
+        window.repaint();
     }
 
     public static void main(String[] args) {

@@ -3,6 +3,7 @@ import java.awt.*;
 
 public class TicTacToeViewer extends JFrame
 {
+    // Instance variables
     private final Image[] images;
     public static final int WINDOW_WIDTH = 750;
     public static final int WINDOW_HEIGHT = 750;
@@ -10,7 +11,9 @@ public class TicTacToeViewer extends JFrame
     public static final Font FONT = new Font("SansSerif", Font.ITALIC, ROW_SIZE / 3);
     public static final Font WIN_FONT = new Font("SansSerif", Font.BOLD, ROW_SIZE / 2);
     private final TicTacToe t;
-    public TicTacToeViewer(TicTacToe t) {
+    public TicTacToeViewer(TicTacToe t)
+    {
+        // Initialize images
 
         images = new Image[2];
         images[0] = new ImageIcon("Resources/X.png").getImage();
