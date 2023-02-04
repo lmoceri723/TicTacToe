@@ -42,6 +42,7 @@ public class TicTacToe
      * The view is initialized with this TicTacToe object
      */
     public TicTacToe() {
+        // Initializes an instance of the viewer
         this.window = new TicTacToeViewer(this);
 
         // Initialize Squares in the board

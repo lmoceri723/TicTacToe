@@ -13,6 +13,7 @@ import java.awt.*;
 
 public class Square {
 
+    // Instance variables
     private String marker;
     private final TicTacToeViewer board;
     private final Image[] images;
@@ -26,6 +27,8 @@ public class Square {
      * @param row the row the square is in
      * @param col the column the square is in
      */
+
+    // Constructor, initializes instance variables
     public Square(int row, int col, TicTacToeViewer board) {
         this.board = board;
         images = board.getImages();
@@ -65,14 +68,17 @@ public class Square {
         return this.marker;
     }
 
+    // Draws the square on the board
     public void draw(Graphics g)
     {
+        // Fills in the green background for winning squares
         if (isWinningSquare)
         {
             g.setColor(Color.GREEN);
             g.fillRect((col + 1) * TicTacToeViewer.ROW_SIZE, (row + 1) * TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE);
         }
 
+        // Draws the image if the square has a value
         if (marker.equals(TicTacToe.X_MARKER))
         {
             g.drawImage(images[0], (col + 1) * TicTacToeViewer.ROW_SIZE, (row + 1) * TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, board);
@@ -81,6 +87,7 @@ public class Square {
         {
             g.drawImage(images[1], (col + 1) * TicTacToeViewer.ROW_SIZE, (row + 1) * TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, board);
         }
+        // Draws the border of the square
         g.setColor(Color.BLACK);
         g.drawRect((row + 1) * TicTacToeViewer.ROW_SIZE, (col + 1) * TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE, TicTacToeViewer.ROW_SIZE);
     }

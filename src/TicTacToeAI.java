@@ -2,7 +2,8 @@
  * By Landon Moceri
  * If anyone sees this, please ignore it
  * Current Errors:
- * Should implement JFrame instead of processing
+ * Should use JFrame instead of processing
+ * Should extend TicTacToe
  * Game bugs out after 4 moves
  * AI always loses
  */
@@ -13,9 +14,6 @@ import java.util.ArrayList;
 public class TicTacToeAI extends PApplet
 {
     public static final int X = 1;
-    public static final int O = 2;
-    public static final int BLANK = 0;
-    public static final int TIE = 0;
     public Integer[][] board = new Integer[3][3];
     public int[] winningPos = new int[4];
 
